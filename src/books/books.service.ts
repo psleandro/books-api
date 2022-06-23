@@ -3,7 +3,7 @@ import { Book } from './book.model';
 
 @Injectable()
 export class BooksService {
-  books: Book[] = [new Book('a', 123, '1234'), new Book('b', 143, '643')];
+  books: Book[] = [];
 
   getAllBooks(): Book[] {
     return this.books;
