@@ -8,38 +8,34 @@ import {
   Put,
 } from '@nestjs/common';
 import { Book } from './book.model';
+import { BooksService } from './books.service';
 
 @Controller('/Books')
 export class BooksController {
-  books: Book[] = [new Book('a', 123, '1234'), new Book('b', 143, '643')];
+  constructor(private booksService: BooksService) { }
 
   @Get()
   getBooks(): Book[] {
-    return this.books;
+    return this.booksService.getAllBooks();
   }
 
   @Get(':id')
   findBook(@Param() findBookDto): Book {
-    return this.books.find((bk) => bk.id === Number(findBookDto.id));
+    return this.booksService.findBook(Number(findBookDto.id));
   }
 
   @Post()
   createBooks(@Body() createBookDto: Book): Book {
-    createBookDto.id = this.books.length + 1;
-    this.books.push(createBookDto);
-    return createBookDto;
+    return this.booksService.createBook(createBookDto);
   }
 
   @Put()
   updateBooks(@Body() updateBookDto): Book {
-    const bookIndex = this.books.findIndex((bk) => bk.id === updateBookDto.id);
-    this.books[bookIndex] = updateBookDto;
-    return updateBookDto;
+    return this.booksService.updateBook(updateBookDto);
   }
 
   @Delete(':id')
   deleteBooks(@Param() deleteBookDto): boolean {
-    this.books = this.books.filter((bk) => bk.id !== deleteBookDto.id);
-    return true;
+    return this.booksService.deleteBook(Number(deleteBookDto.id));
   }
 }
